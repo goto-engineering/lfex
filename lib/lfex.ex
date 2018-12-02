@@ -1,8 +1,8 @@
 defmodule Lfex do
-  def interpret(program, env) do
+  def interpret(program) do
     program
     |> Parse.parse
-    |> Eval.eval(env, 0)
+    |> Eval.eval()
   end
 
   def to_lfex_string(exp) do
@@ -12,10 +12,10 @@ defmodule Lfex do
     end
   end
 
-  def repl(env \\ nil) do
+  def repl do
     program = IO.gets "lfex> "
-    {result, env}  = program |> interpret(env)
+    {result}  = program |> interpret()
     result |> to_lfex_string |> IO.puts
-    repl(env)
+    repl()
   end
 end
