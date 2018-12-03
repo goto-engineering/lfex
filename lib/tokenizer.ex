@@ -22,11 +22,9 @@ defmodule Tokenizer do
   defp tokenize(~s(") <> rest, acc), do: [tokenize_string(rest, "") | acc]
 
   defp tokenize("(" <> rest, acc), do: tokenize(rest, ["(" | acc])
-  defp tokenize(")", acc) do
-    Enum.reverse([")" | acc])
-  end
+  defp tokenize(")" <> rest, acc), do: tokenize(rest, [")" | acc])
 
-  defp tokenize([], acc), do: Enum.reverse(acc)
+  defp tokenize("", acc), do: Enum.reverse(acc)
 
   defp tokenize(x, acc) do
     case String.contains?(x, " ") do
