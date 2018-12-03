@@ -23,6 +23,8 @@ defmodule Tokenizer do
 
   defp tokenize("(" <> rest, acc), do: tokenize(rest, ["(" | acc])
   defp tokenize(")" <> rest, acc), do: tokenize(rest, [")" | acc])
+  defp tokenize("[" <> rest, acc), do: tokenize(rest, ["[" | acc])
+  defp tokenize("]" <> rest, acc), do: tokenize(rest, ["]" | acc])
 
   defp tokenize("", acc), do: Enum.reverse(acc)
 
@@ -35,11 +37,18 @@ defmodule Tokenizer do
   end
 
   defp tokenize_stuffs(x, acc) do
-    case String.ends_with?(x, ")") do
+    handle_brackets = fn y, z -> 
+      handle_end_delimiter(y, "]", z, fn y, f -> [y, f] end )
+    end
+    handle_end_delimiter(x, ")", acc, handle_brackets)
+  end
+
+  defp handle_end_delimiter(x, delimiter, acc, then_fn) do
+    case String.ends_with?(x, delimiter) do
       true -> remainder = remove_last_char(x)
         tokenized_remainder = tokenize(remainder, [])
-        tokenize(")", [tokenized_remainder | acc])
-      false -> [x | acc]
+        tokenize(delimiter, [tokenized_remainder | acc])
+      false -> then_fn.(x, acc)
     end
   end
 

@@ -49,7 +49,12 @@ defmodule TokenizerTest do
     assert Tokenizer.tokenize("; Hello World") == []
   end
 
-  # test "lists []"
+  test "lists []" do
+    assert Tokenizer.tokenize("[]") == ["[", "]"]
+    assert Tokenizer.tokenize("[   ]") == ["[", "]"]
+    assert Tokenizer.tokenize(~s([1 :alice "Bob" 5.55])) == ["[", "1", ":alice", "Bob", "5.55", "]"]
+  end
+
   # test "tuples"
 
   test "tokenizes lists with things in them" do
