@@ -25,6 +25,8 @@ defmodule Tokenizer do
   defp tokenize(")" <> rest, acc), do: tokenize(rest, [")" | acc])
   defp tokenize("[" <> rest, acc), do: tokenize(rest, ["[" | acc])
   defp tokenize("]" <> rest, acc), do: tokenize(rest, ["]" | acc])
+  defp tokenize("{" <> rest, acc), do: tokenize(rest, ["{" | acc])
+  defp tokenize("}" <> rest, acc), do: tokenize(rest, ["}" | acc])
 
   defp tokenize("", acc), do: Enum.reverse(acc)
 
@@ -37,10 +39,17 @@ defmodule Tokenizer do
   end
 
   defp tokenize_stuffs(x, acc) do
+    handle_primitives = fn y, f -> [y, f] end
+
     handle_brackets = fn y, z -> 
-      handle_end_delimiter(y, "]", z, fn y, f -> [y, f] end )
+      handle_end_delimiter(y, "]", z, handle_primitives)
     end
-    handle_end_delimiter(x, ")", acc, handle_brackets)
+
+    handle_tuples = fn y, z ->
+      handle_end_delimiter(y, "}", z, handle_brackets)
+    end
+
+    handle_end_delimiter(x, ")", acc, handle_tuples)
   end
 
   defp handle_end_delimiter(x, delimiter, acc, then_fn) do
