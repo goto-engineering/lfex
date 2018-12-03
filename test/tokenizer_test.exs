@@ -18,6 +18,13 @@ defmodule TokenizerTest do
     assert Tokenizer.tokenize(~s("Alice and Bob ")) == ["Alice and Bob "]
   end
 
+  test "tokenize things after strings" do
+    code = """
+    (:atom "Bob" 4 :jane)
+    """
+    assert Tokenizer.tokenize(code) == ["(", ":atom", "Bob", "4", ":jane", ")"]
+  end
+
   test "tokenizes atoms" do
     assert Tokenizer.tokenize(":adam") == [":adam"]
   end
@@ -63,10 +70,10 @@ defmodule TokenizerTest do
     assert Tokenizer.tokenize(code) == ["(", "*", "2", "(", "+", "3", "4", ")", ")"]
   end
 
-  # test "tokenizes strings with spaces in lists" do
-  #   code = """
-  #   (IO.puts " and ")
-  #   """
-  #   assert Tokenizer.tokenize(code) == ["(", "IO.puts", ~s(" and "), ")"]
-  # end
+  test "tokenizes strings with spaces in lists" do
+    code = """
+    (IO.puts " and ")
+    """
+    assert Tokenizer.tokenize(code) == ["(", "IO.puts", " and ", ")"]
+  end
 end

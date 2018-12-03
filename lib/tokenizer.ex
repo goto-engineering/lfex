@@ -19,7 +19,7 @@ defmodule Tokenizer do
   defp tokenize(" " <> rest, acc), do: tokenize(rest, acc) 
   defp tokenize(";" <> rest, acc), do: tokenize_comment(rest, acc)
 
-  defp tokenize(~s(") <> rest, acc), do: [tokenize_string(rest, "") | acc]
+  defp tokenize(~s(") <> rest, acc), do: tokenize_string(rest, "", acc)
 
   defp tokenize("(" <> rest, acc), do: tokenize(rest, ["(" | acc])
   defp tokenize(")" <> rest, acc), do: tokenize(rest, [")" | acc])
@@ -30,18 +30,22 @@ defmodule Tokenizer do
     case String.contains?(x, " ") do
       true -> [token, rest] = String.split(x, " ", parts: 2)
         tokenize(rest, [token | acc])
-      false -> case String.ends_with?(x, ")") do
-        true -> remainder = remove_last_char(x)
-          tokenized_remainder = tokenize(remainder, [])
-          tokenize(")", [tokenized_remainder | acc])
-        false -> [x | acc]
-      end
+      false -> tokenize_stuffs(x, acc)
     end
   end
 
-  defp tokenize_string(~s(") <> _, acc), do: acc
-  defp tokenize_string(string, acc) do
-    tokenize_string(remove_first_char(string), acc <> String.first(string))
+  defp tokenize_stuffs(x, acc) do
+    case String.ends_with?(x, ")") do
+      true -> remainder = remove_last_char(x)
+        tokenized_remainder = tokenize(remainder, [])
+        tokenize(")", [tokenized_remainder | acc])
+      false -> [x | acc]
+    end
+  end
+
+  defp tokenize_string(~s(") <> rest, str_acc, acc), do: tokenize(rest, [str_acc | acc])
+  defp tokenize_string(string, str_acc, acc) do
+    tokenize_string(remove_first_char(string), str_acc <> String.first(string), acc)
   end
 
   defp tokenize_comment("\n" <> rest, acc), do: tokenize(rest, acc)
