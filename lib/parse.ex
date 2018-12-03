@@ -1,16 +1,7 @@
 defmodule Parse do
-  def tokenize(str) do
-    str
-    |> String.replace("(", " ( ")
-    |> String.replace(")", " ) ")
-    |> String.replace("[", " [ ")
-    |> String.replace("]", " ] ")
-    |> String.split()
-  end
-
   def parse(program) do
     program
-    |> tokenize
+    |> Tokenizer.tokenize
     |> parse([])
     |> hd
   end
@@ -39,16 +30,6 @@ defmodule Parse do
 
   defp parse([head | tail], acc) do
     parse(tail, [typecast(head) | acc])
-  end
-
-  def typecast("\"" <> token) do
-    case String.last(token) do
-      "\"" -> String.slice(token, 0, String.length(token) - 1)
-    end
-  end
-
-  def typecast(":" <> token) do
-    String.to_atom(token)
   end
 
   def typecast(token) do
