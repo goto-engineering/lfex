@@ -1,6 +1,13 @@
-# Lfex
+# Lisp Flavored Elixir
 
-**TODO: Add description**
+Inspired by Lispex and LFE.
+
+## Todo
+
+1.Tuples
+1.Dashes in symbol and atom names
+1.Underscores in symbol and atom names
+1.Switch to character-wise, context based lexer?
 
 ## Installation
 
