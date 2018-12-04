@@ -20,7 +20,7 @@ defmodule Tokenizer do
   defp tokenize(" " <> rest, acc), do: tokenize(rest, acc) 
   defp tokenize(";" <> rest, acc), do: tokenize_comment(rest, acc)
 
-  defp tokenize(~s(") <> rest, acc), do: tokenize_string(rest, "", acc)
+  defp tokenize(~s(") <> rest, acc), do: tokenize_string(rest, ~s("), acc)
 
   defp tokenize("(" <> rest, acc), do: tokenize(rest, ["(" | acc])
   defp tokenize(")" <> rest, acc), do: tokenize(rest, [")" | acc])
@@ -62,7 +62,7 @@ defmodule Tokenizer do
     end
   end
 
-  defp tokenize_string(~s(") <> rest, str_acc, acc), do: tokenize(rest, [str_acc | acc])
+  defp tokenize_string(~s(") <> rest, str_acc, acc), do: tokenize(rest, [str_acc <> ~s(") | acc])
   defp tokenize_string(string, str_acc, acc) do
     tokenize_string(remove_first_char(string), str_acc <> String.first(string), acc)
   end

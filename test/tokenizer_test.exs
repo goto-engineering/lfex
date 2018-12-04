@@ -15,18 +15,18 @@ defmodule TokenizerTest do
   end
 
   test "tokenizes empty strings" do
-    assert Tokenizer.tokenize(~s("")) == [""]
+    assert Tokenizer.tokenize(~s("")) == [~s("")]
   end
 
   test "tokenizes strings with spaces" do
-    assert Tokenizer.tokenize(~s("Alice and Bob ")) == ["Alice and Bob "]
+    assert Tokenizer.tokenize(~s("Alice and Bob ")) == [~s("Alice and Bob ")]
   end
 
   test "tokenize things after strings" do
     code = """
     (:atom "Bob" 4 :jane)
     """
-    assert Tokenizer.tokenize(code) == ["(", ":atom", "Bob", "4", ":jane", ")"]
+    assert Tokenizer.tokenize(code) == ["(", ":atom", ~s("Bob"), "4", ":jane", ")"]
   end
 
   test "tokenizes atoms" do
@@ -56,14 +56,14 @@ defmodule TokenizerTest do
   test "lists []" do
     assert Tokenizer.tokenize("[]") == ["[", "]"]
     assert Tokenizer.tokenize("[   ]") == ["[", "]"]
-    assert Tokenizer.tokenize(~s([1 :alice "Bob" 5.55])) == ["[", "1", ":alice", "Bob", "5.55", "]"]
-    assert Tokenizer.tokenize(~s([1, :alice, "Bob", 5.55])) == ["[", "1", ":alice", "Bob", "5.55", "]"]
+    assert Tokenizer.tokenize(~s([1 :alice "Bob" 5.55])) == ["[", "1", ":alice", ~s("Bob"), "5.55", "]"]
+    assert Tokenizer.tokenize(~s([1, :alice, "Bob", 5.55])) == ["[", "1", ":alice", ~s("Bob"), "5.55", "]"]
   end
 
   test "tuples" do
     assert Tokenizer.tokenize("{}") == ["{", "}"]
     assert Tokenizer.tokenize("{   }") == ["{", "}"]
-    assert Tokenizer.tokenize(~s({1 :alice "Bob" 5.55})) == ["{", "1", ":alice", "Bob", "5.55", "}"]
+    assert Tokenizer.tokenize(~s({1 :alice "Bob" 5.55})) == ["{", "1", ":alice", ~s("Bob"), "5.55", "}"]
   end
 
   test "tokenizes lists with things in them" do
@@ -88,6 +88,6 @@ defmodule TokenizerTest do
     code = """
     (IO.puts " and ")
     """
-    assert Tokenizer.tokenize(code) == ["(", "IO.puts", " and ", ")"]
+    assert Tokenizer.tokenize(code) == ["(", "IO.puts", ~s(" and "), ")"]
   end
 end
