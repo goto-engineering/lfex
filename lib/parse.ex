@@ -24,12 +24,24 @@ defmodule Parse do
     {tail, Enum.reverse(acc)}
   end
 
-  defp parse([], acc) do
-    Enum.reverse(acc)
+  defp parse(["{" | tail], acc) do
+    {rem_tokens, sub_tree} = parse(tail, [])
+    parse(rem_tokens, [sub_tree | acc])
   end
 
-  defp parse([head | tail], acc) do
+  defp parse(["}" | tail], acc) do
+    {tail, acc |> Enum.reverse |> List.to_tuple}
+  end
+
+  defp parse([], acc) when is_list(acc), do: Enum.reverse(acc)
+  defp parse([], acc) when is_tuple(acc), do: [acc]
+
+  defp parse([head | tail], acc) when is_list(acc) do
     parse(tail, [typecast(head) | acc])
+  end
+
+  defp parse([head | tail], acc) when is_tuple(acc) do
+    parse(tail, Tuple.append(acc, typecast(head)))
   end
 
   defp typecast(token) do

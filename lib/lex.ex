@@ -53,6 +53,7 @@ defmodule Lex do
     handle_end_delimiter(x, ")", acc, handle_tuples)
   end
 
+  # This is so buggy. Lists after lists, or tuples after tuples, seem to mess it up.
   defp handle_end_delimiter(x, delimiter, acc, then_fn) do
     case String.ends_with?(x, delimiter) do
       true -> remainder = remove_last_char(x)

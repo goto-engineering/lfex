@@ -58,6 +58,7 @@ defmodule LexTest do
     assert Lex.lex("[   ]") == ["[", "]"]
     assert Lex.lex(~s([1 :alice "Bob" 5.55])) == ["[", "1", ":alice", ~s("Bob"), "5.55", "]"]
     assert Lex.lex(~s([1, :alice, "Bob", 5.55])) == ["[", "1", ":alice", ~s("Bob"), "5.55", "]"]
+    assert Lex.lex("[[:alice :bob] [3]]") == ["[", "[", ":alice", ":bob", "]", "[", "3", "]", "]"]
   end
 
   test "tuples" do

@@ -15,8 +15,9 @@ defmodule ParseTest do
     assert Parse.parse(code) == [1, 2, 3, "Bob", :alice]
   end
 
-  # test "tuples" do
-  # end
+  test "parses tuples" do
+    assert Parse.parse("{:name 2}") == {:name, 2}
+  end
 
   test "parses Module.function calls" do
     code = """

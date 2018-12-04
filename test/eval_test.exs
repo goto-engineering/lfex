@@ -22,6 +22,25 @@ defmodule EvalTest do
     assert Eval.eval(expr) == [1, :jeff, ["Bob", "Jane"], " and "]
   end
 
+  test "evals a tuple" do
+    expr = """
+    {{"Jose" "Rich"} {:brazil :usa}}
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == {{"Jose", "Rich"}, {:brazil, :usa}}
+  end
+
+  test "evals massive nested data structures" do
+    expr = """
+    [{:alice "Bob" [:charlie {:dorothy}, :straycomma 3] "Theodore Roosevelt" 26 }
+     {:hello "This is the " :magic " Sword"}]
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == {{"Jose", "Rich"}, {:brazil, :usa}}
+  end
+
   test "evals a function call" do
     expr = """
     (Enum.join ["Bob" "Jane"] " and ")
