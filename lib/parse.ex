@@ -32,7 +32,7 @@ defmodule Parse do
     parse(tail, [typecast(head) | acc])
   end
 
-  def typecast(token) do
+  defp typecast(token) do
     case Integer.parse(token) do
       {value, ""} ->
         value
@@ -40,8 +40,13 @@ defmodule Parse do
       :error ->
         case Float.parse(token) do
           {value, ""} -> value
-          :error -> String.to_atom(token)
+          :error -> string_or_atom(token)
         end
     end
   end
+
+  # TODO: extract slice from tokenizer and share
+  defp string_or_atom(~s(") <> token), do: String.slice(token, 0..-2)
+  defp string_or_atom(":" <> token), do: String.to_atom(token)
+  defp string_or_atom(token), do: String.to_atom(token)
 end
