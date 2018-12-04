@@ -15,6 +15,15 @@ defmodule EvalTest do
 
   test "evals a list" do
     expr = """
+    [1 :jeff ["Bob" "Jane"] " and "]
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == [1, :jeff, ["Bob", "Jane"], " and "]
+  end
+
+  test "evals a function call" do
+    expr = """
     (Enum.join ["Bob" "Jane"] " and ")
     """
     |> Parse.parse

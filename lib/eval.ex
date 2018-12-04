@@ -1,5 +1,5 @@
 defmodule Eval do
-  def eval(x) when is_list(x) do
+  def eval([:__call__ | x]) do
     {module, function} =
       case hd(x) |> to_string |> String.split(".") do
         [operator] -> {"Kernel", operator}

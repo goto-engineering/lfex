@@ -8,7 +8,7 @@ defmodule Parse do
 
   defp parse(["(" | tail], acc) do
     {rem_tokens, sub_tree} = parse(tail, [])
-    parse(rem_tokens, [sub_tree | acc])
+    parse(rem_tokens, [[:__call__ | sub_tree] | acc])
   end
 
   defp parse([")" | tail], acc) do
