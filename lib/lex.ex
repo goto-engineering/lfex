@@ -8,6 +8,8 @@ defmodule Lex do
      ["(", "*", "2", "(", "+", "3", "4", ")", ")"]
   """
 
+  import Common
+
   def lex(string) do
     string
     |> String.trim
@@ -56,7 +58,7 @@ defmodule Lex do
   # This is so buggy. Lists after lists, or tuples after tuples, seem to mess it up.
   defp handle_end_delimiter(x, delimiter, acc, then_fn) do
     case String.ends_with?(x, delimiter) do
-      true -> remainder = remove_last_char(x)
+      true -> remainder = drop_last(x)
         lexd_remainder = lex(remainder, [])
         lex(delimiter, [lexd_remainder | acc])
       false -> then_fn.(x, acc)
@@ -65,13 +67,10 @@ defmodule Lex do
 
   defp lex_string(~s(") <> rest, str_acc, acc), do: lex(rest, [str_acc <> ~s(") | acc])
   defp lex_string(string, str_acc, acc) do
-    lex_string(remove_first_char(string), str_acc <> String.first(string), acc)
+    lex_string(drop_first(string), str_acc <> String.first(string), acc)
   end
 
   defp lex_comment("\n" <> rest, acc), do: lex(rest, acc)
   defp lex_comment("", acc), do: acc
-  defp lex_comment(comment, acc), do: lex_comment(remove_first_char(comment), acc)
-
-  defp remove_first_char(string), do: String.slice(string, 1..-1)
-  defp remove_last_char(string), do: String.slice(string, 0..-2)
+  defp lex_comment(comment, acc), do: lex_comment(drop_first(comment), acc)
 end

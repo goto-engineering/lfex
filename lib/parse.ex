@@ -57,8 +57,7 @@ defmodule Parse do
     end
   end
 
-  # TODO: extract slice from tokenizer and share
-  defp string_or_atom(~s(") <> token), do: String.slice(token, 0..-2)
+  defp string_or_atom(~s(") <> token), do: Common.drop_last(token)
   defp string_or_atom(":" <> token), do: String.to_atom(token)
   defp string_or_atom(token), do: String.to_atom(token)
 end
