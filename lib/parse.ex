@@ -1,7 +1,7 @@
 defmodule Parse do
   def parse(program) do
     program
-    |> Tokenizer.tokenize
+    |> Lex.lex
     |> parse([])
     |> hd
   end
