@@ -11,6 +11,7 @@ defmodule Tokenizer do
   def tokenize(string) do
     string
     |> String.trim
+    |> String.replace(",", "")
     |> tokenize([])
     |> List.flatten
   end

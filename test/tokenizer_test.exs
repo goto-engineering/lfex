@@ -10,6 +10,10 @@ defmodule TokenizerTest do
     assert Tokenizer.tokenize("(   )") == ["(", ")"]
   end
 
+  test "commas count as whitespace" do
+    assert Tokenizer.tokenize("(, ,, )") == ["(", ")"]
+  end
+
   test "tokenizes empty strings" do
     assert Tokenizer.tokenize(~s("")) == [""]
   end
@@ -53,6 +57,7 @@ defmodule TokenizerTest do
     assert Tokenizer.tokenize("[]") == ["[", "]"]
     assert Tokenizer.tokenize("[   ]") == ["[", "]"]
     assert Tokenizer.tokenize(~s([1 :alice "Bob" 5.55])) == ["[", "1", ":alice", "Bob", "5.55", "]"]
+    assert Tokenizer.tokenize(~s([1, :alice, "Bob", 5.55])) == ["[", "1", ":alice", "Bob", "5.55", "]"]
   end
 
   test "tuples" do
