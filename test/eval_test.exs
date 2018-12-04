@@ -15,9 +15,19 @@ defmodule EvalTest do
 
   test "evals a list" do
     expr = """
-    (Enum.join ["Bob" "Jane"] "and")
+    (Enum.join ["Bob" "Jane"] " and ")
     """
     |> Parse.parse
-    assert Eval.eval(expr) == "BobandJane"
+
+    assert Eval.eval(expr) == "Bob and Jane"
+  end
+
+  test "evals operators" do
+    expr = """
+    (* 2 4)
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == 8
   end
 end
