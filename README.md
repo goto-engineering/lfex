@@ -6,6 +6,7 @@ Inspired by Lispex and LFE.
 
 1.Dashes in fn names?
 1.How does threading work? |>? Clojure style ->?
+1.Anonymous fn syntax?
 
 ## Installation
 

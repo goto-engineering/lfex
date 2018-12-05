@@ -61,4 +61,13 @@ defmodule EvalTest do
 
     assert Eval.eval(expr) == 8
   end
+
+  test "evals nested expressions" do
+    expr = """
+    (* 2 (+ 3 4))
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == 14
+  end
 end
