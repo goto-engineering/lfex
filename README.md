@@ -4,9 +4,10 @@ Inspired by Lispex and LFE.
 
 ## Todo
 
-1.Dashes in fn names?
 1.How does threading work? |>? Clojure style ->?
 1.Anonymous fn syntax?
+1.Dashes in fn names?
+1.Macros - defmodule, defn
 
 ## Installation
 
