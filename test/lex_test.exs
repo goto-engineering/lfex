@@ -2,11 +2,11 @@ defmodule LexTest do
   use ExUnit.Case
   doctest Lex
 
-  test "lexs empty list" do
+  test "lexes empty list" do
     assert Lex.lex("()") == ["(", ")"]
   end
 
-  test "lexs list with spaces" do
+  test "lexes list with spaces" do
     assert Lex.lex("(   )") == ["(", ")"]
   end
 
@@ -14,11 +14,11 @@ defmodule LexTest do
     assert Lex.lex("(, ,, )") == ["(", ")"]
   end
 
-  test "lexs empty strings" do
+  test "lexes empty strings" do
     assert Lex.lex(~s("")) == [~s("")]
   end
 
-  test "lexs strings with spaces" do
+  test "lexes strings with spaces" do
     assert Lex.lex(~s("Alice and Bob ")) == [~s("Alice and Bob ")]
   end
 
@@ -29,23 +29,23 @@ defmodule LexTest do
     assert Lex.lex(code) == ["(", ":atom", ~s("Bob"), "4", ":jane", ")"]
   end
 
-  test "lexs atoms" do
-    assert Lex.lex(":adam") == [":adam"]
+  test "lexes atoms" do
+    assert Lex.lex(":eve") == [":eve"]
   end
 
-  test "lexs integers" do
+  test "lexes integers" do
     assert Lex.lex("555") == ["555"]
   end
 
-  test "lexs floats" do
+  test "lexes floats" do
     assert Lex.lex("5.55") == ["5.55"]
   end
 
-  test "lexs operators as atoms" do
+  test "lexes operators" do
     assert Lex.lex("*") == ["*"]
   end
 
-  test "lexs function names as atoms" do
+  test "lexes function names" do
     assert Lex.lex("IO.puts") == ["IO.puts"]
   end
 
@@ -67,11 +67,11 @@ defmodule LexTest do
     assert Lex.lex(~s({1 :alice "Bob" 5.55})) == ["{", "1", ":alice", ~s("Bob"), "5.55", "}"]
   end
 
-  test "lexs lists with things in them" do
+  test "lexes lists with things in them" do
     assert Lex.lex("(* 2 2)") == ["(", "*", "2", "2", ")"]
   end
 
-  test "lexs numbers and operators in nested lists" do
+  test "lexes numbers and operators in nested lists" do
     code = "(* 2 (+ 3 4))"
     assert Lex.lex(code) == ["(", "*", "2", "(", "+", "3", "4", ")", ")"]
   end
@@ -85,10 +85,17 @@ defmodule LexTest do
     assert Lex.lex(code) == ["(", "*", "2", "(", "+", "3", "4", ")", ")"]
   end
 
-  test "lexs strings with spaces in lists" do
+  test "lexes strings with spaces in lists" do
     code = """
     (IO.puts " and ")
     """
     assert Lex.lex(code) == ["(", "IO.puts", ~s(" and "), ")"]
+  end
+
+  test "lexes symbol before line break" do
+    code = """
+    :luthor
+    """
+    assert Lex.lex(code) == [":luthor"]
   end
 end
