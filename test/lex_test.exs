@@ -33,6 +33,11 @@ defmodule LexTest do
     assert Lex.lex(":eve") == [":eve"]
   end
 
+  test "lexes atoms with dashes and underscores" do
+    assert Lex.lex(":eve-y") == [":eve-y"]
+    assert Lex.lex(":eve_y") == [":eve_y"]
+  end
+
   test "lexes integers" do
     assert Lex.lex("555") == ["555"]
   end
