@@ -38,7 +38,10 @@ defmodule EvalTest do
     """
     |> Parse.parse
 
-    assert Eval.eval(expr) == {{"Jose", "Rich"}, {:brazil, :usa}}
+    assert Eval.eval(expr) == [
+      {:alice, "Bob", [:charlie, {:dorothy}, :straycomma, 3], "Theodore Roosevelt", 26},
+      {:hello, "This is the ", :magic, " Sword"}
+    ]
   end
 
   test "evals a function call" do
