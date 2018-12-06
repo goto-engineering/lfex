@@ -4,10 +4,16 @@ Inspired by Lispex and LFE.
 
 ## Todo
 
-1.How does threading work? |>? Clojure style ->?
-1.Anonymous fn syntax?
+1.Pattern matching - let?
+1.Maps
+1.Function references
+1.Use macros - defmodule, defn
+1.Anonymous fn syntax? Elixir syntax, Clojure syntax, ES6 syntax?
 1.Dashes in fn names?
-1.Macros - defmodule, defn
+1.Error handling - don't just crash the REPL
+1.Structs
+1.How does threading work? |>? Clojure style ->? Implement as macro?
+1.Define user macros?
 
 ## Installation
 
