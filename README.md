@@ -4,8 +4,8 @@ Inspired by Lispex and LFE.
 
 ## Todo
 
+1.mix start should start repl
 1.Pattern matching - let?
-1.Maps
 1.Function references
 1.Use macros - defmodule, defn
 1.Anonymous fn syntax? Elixir syntax, Clojure syntax, ES6 syntax?

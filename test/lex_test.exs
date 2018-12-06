@@ -72,6 +72,13 @@ defmodule LexTest do
     assert Lex.lex(~s({1 :alice "Bob" 5.55})) == ["{", "1", ":alice", ~s("Bob"), "5.55", "}"]
   end
 
+  test "maps" do
+    assert Lex.lex("%{}") == ["%{", "}"]
+    assert Lex.lex("%{  }") == ["%{", "}"]
+    assert Lex.lex("%{:bob 1 :jane 2}") == ["%{", ":bob", "1", ":jane", "2", "}"]
+    assert Lex.lex(~s(%{:bob "one", "jane" 2})) == ["%{", ":bob", ~s("one"), ~s("jane"), "2", "}"]
+  end
+
   test "lexes lists with things in them" do
     assert Lex.lex("(* 2 2)") == ["(", "*", "2", "2", ")"]
   end

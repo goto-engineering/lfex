@@ -1,12 +1,12 @@
 defmodule Lex do
-  # @moduledoc """
-  # Splits Lisp code into string tokens
+  @moduledoc """
+  Splits Lisp code into string tokens
 
-  # ## Example
+  ## Example
   
-  #    iex(1)> Lex.lex("(* 2 (+ 3 4))")
-  #    ["(", "*", "2", "(", "+", "3", "4", ")", ")"]
-  # """
+     iex(1)> Lex.lex("(* 2 (+ 3 4))")
+     ["(", "*", "2", "(", "+", "3", "4", ")", ")"]
+  """
 
   import Common
 
@@ -47,18 +47,24 @@ defmodule Lex do
     lex(rest, [symbol_acc | acc], "")
   end
 
+  defp lex("%{" <> rest, acc, symbol_acc) do
+    lex(rest, ["%{" | acc], symbol_acc)
+  end
+
   @open_delimiters ["(", "[", "{"]
   @close_delimiters [")", "]", "}"]
 
   defp lex(x, acc, symbol_acc) do
     char = String.first(x)
+    rest = drop_first(x)
+
     cond do
       Enum.member?(@open_delimiters, char) ->
-        lex(drop_first(x), [char | acc], "")
+        lex(rest, [char | acc], "")
       Enum.member?(@close_delimiters, char) ->
-        lex(drop_first(x), [char| add_symbol_unless_empty(acc, symbol_acc)], "")
+        lex(rest, [char| add_symbol_unless_empty(acc, symbol_acc)], "")
       true ->
-        lex(drop_first(x), acc, symbol_acc <> char)
+        lex(rest, acc, symbol_acc <> char)
     end
   end
 

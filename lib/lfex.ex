@@ -7,12 +7,24 @@ defmodule Lfex do
 
   def to_lfex_string(expr) when is_atom(expr), do: ":#{expr}"
   def to_lfex_string(expr) when is_binary(expr), do: ~s("#{expr}")
+
   def to_lfex_string(expr) when is_list(expr) do
     string = expr
              |> Enum.map(&to_lfex_string/1)
              |> Enum.join(" ")
     "[#{string}]"
   end
+
+  def to_lfex_string(expr) when is_map(expr) do
+    string = expr
+             |> Map.to_list
+             |> Enum.map(fn t -> Tuple.to_list(t) end)
+             |> List.flatten
+             |> Enum.map(&to_lfex_string/1)
+             |> Enum.join(" ")
+    "%{#{string}}"
+  end
+
   def to_lfex_string(expr), do: to_string(expr)
 
   def repl do

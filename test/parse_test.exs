@@ -24,6 +24,33 @@ defmodule ParseTest do
     assert Parse.parse("{:name 2}") == {:name, 2}
   end
 
+  test "parses maps" do
+    assert Parse.parse("%{}") == %{}
+    assert Parse.parse("%{:bob 1 :jane 2}") == %{:bob => 1, :jane => 2}
+    assert Parse.parse(~s(%{:bob "one", "jane" 2})) == %{:bob => "one", "jane" => 2}
+
+    map = """
+    %{:users [%{:name "Alice" :age 30}
+              %{:name "Bob" :age 42}
+              %{:name "Charlie" :age 12}]
+      :admin true}
+    """
+    assert Parse.parse(map) == %{
+      :users => [
+        %{name: "Alice", age: 30},
+        %{name: "Bob", age: 42},
+        %{name: "Charlie", age: 12}
+      ],
+      admin: true
+    }
+
+    map_and_tuple = """
+    [%{1 :bob 2 :alice}
+     {:jane doe}]
+    """
+    assert Parse.parse(map_and_tuple) == [%{1 => :bob, 2 => :alice}, {:jane, :doe}]
+  end
+
   test "parses Module.function calls" do
     code = """
     (IO.puts "Hello world!")

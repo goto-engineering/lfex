@@ -31,6 +31,25 @@ defmodule EvalTest do
     assert Eval.eval(expr) == {{"Jose", "Rich"}, {:brazil, :usa}}
   end
 
+  test "evals maps" do
+    expr = """
+    %{:users [%{:name "Alice" :age 30}
+              %{:name "Bob" :age 42}
+              %{:name "Charlie" :age 12}]
+      :admin true}
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == %{
+      :users => [
+        %{name: "Alice", age: 30},
+        %{name: "Bob", age: 42},
+        %{name: "Charlie", age: 12}
+      ],
+      admin: true
+    }
+  end
+
   test "evals massive nested data structures" do
     expr = """
     [{:alice "Bob" [:charlie {:dorothy}, :straycomma 3] "Theodore Roosevelt" 26 }

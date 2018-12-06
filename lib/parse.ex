@@ -6,37 +6,52 @@ defmodule Parse do
     |> hd
   end
 
-  defp parse(["(" | tail], acc) do
+  defp parse(tail, acc, in_map \\ false)
+
+  defp parse(["(" | tail], acc, in_map) do
     {rem_tokens, sub_tree} = parse(tail, [])
-    parse(rem_tokens, [[:__call__ | sub_tree] | acc])
+    parse(rem_tokens, [[:__call__ | sub_tree] | acc], in_map)
   end
 
-  defp parse([")" | tail], acc) do
+  defp parse([")" | tail], acc, _) do
     {tail, Enum.reverse(acc)}
   end
 
-  defp parse(["[" | tail], acc) do
+  defp parse(["[" | tail], acc, in_map) do
     {rem_tokens, sub_tree} = parse(tail, [])
-    parse(rem_tokens, [sub_tree | acc])
+    parse(rem_tokens, [sub_tree | acc], in_map)
   end
 
-  defp parse(["]" | tail], acc) do
+  defp parse(["]" | tail], acc, _) do
     {tail, Enum.reverse(acc)}
   end
 
-  defp parse(["{" | tail], acc) do
+  defp parse(["{" | tail], acc, in_map) do
     {rem_tokens, sub_tree} = parse(tail, [])
-    parse(rem_tokens, [sub_tree | acc])
+    parse(rem_tokens, [sub_tree | acc], in_map)
   end
 
-  defp parse(["}" | tail], acc) do
+  defp parse(["%{" | tail], acc, _) do
+    {rem_tokens, sub_tree} = parse(tail, [], true)
+    parse(rem_tokens, [sub_tree | acc], false)
+  end
+
+  defp parse(["}" | tail], acc, false) do
     {tail, acc |> Enum.reverse |> List.to_tuple}
   end
 
-  defp parse([], acc) when is_list(acc), do: Enum.reverse(acc)
+  defp parse(["}" | tail], acc, true) do
+    map = acc
+          |> Enum.reverse
+          |> Enum.chunk_every(2)
+          |> Map.new(fn [k, v] -> {k, v} end)
+    {tail, map}
+  end
 
-  defp parse([head | tail], acc) when is_list(acc) do
-    parse(tail, [typecast(head) | acc])
+  defp parse([], acc, _) when is_list(acc), do: Enum.reverse(acc)
+
+  defp parse([head | tail], acc, in_map) when is_list(acc) do
+    parse(tail, [typecast(head) | acc], in_map)
   end
 
   defp typecast(token) do
