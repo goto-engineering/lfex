@@ -4,13 +4,12 @@ Inspired by Lispex and LFE.
 
 ## Todo
 
-1.mix start should start repl
-1.Pattern matching - let?
-1.Function references
 1.Use macros - defmodule, defn
+1.Error handling - don't just crash the REPL
+1.Function references
+1.Pattern matching - let?
 1.Anonymous fn syntax? Elixir syntax, Clojure syntax, ES6 syntax?
 1.Dashes in fn names?
-1.Error handling - don't just crash the REPL
 1.Structs
 1.How does threading work? |>? Clojure style ->? Implement as macro?
 1.Define user macros?
