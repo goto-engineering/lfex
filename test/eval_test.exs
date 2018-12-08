@@ -1,6 +1,8 @@
 defmodule EvalTest do
   use ExUnit.Case
 
+  import ExUnit.CaptureIO
+
   test "evals a number" do
     assert Eval.eval(2) == 2
   end
@@ -88,5 +90,22 @@ defmodule EvalTest do
     |> Parse.parse
 
     assert Eval.eval(expr) == 14
+  end
+
+  test "evals several expressions on multiple lines" do
+    expr = """
+    (IO.puts "Hi")
+
+    (IO.puts "Ok")
+    """
+    |> Parse.parse
+    |> IO.inspect
+
+    assert capture_io(fn ->
+      Eval.eval(expr)
+    end) == """
+    Hi
+    Ok
+    """
   end
 end

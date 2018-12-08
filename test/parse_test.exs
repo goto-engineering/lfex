@@ -64,4 +64,14 @@ defmodule ParseTest do
     """
     assert Parse.parse(code) == [:__call__, :"String.to_integer", "666"]
   end
+
+  test "parses multiple expressions on multiple lines" do
+    expr = """
+    (IO.puts "Hi")
+
+    (IO.puts "Ok")
+    """
+
+    assert Parse.parse(expr) == [[:__call__, :"IO.puts", "Hi"], [:__call__, :"IO.puts", "Ok"]]
+  end
 end

@@ -3,7 +3,7 @@ defmodule Parse do
     program
     |> Lex.lex
     |> parse([])
-    |> hd
+    |> flatten_if_trivial
   end
 
   defp parse(tail, acc, in_map \\ false)
@@ -13,9 +13,7 @@ defmodule Parse do
     parse(rem_tokens, [[:__call__ | sub_tree] | acc], in_map)
   end
 
-  defp parse([")" | tail], acc, _) do
-    {tail, Enum.reverse(acc)}
-  end
+  defp parse([")" | tail], acc, _), do: {tail, Enum.reverse(acc)}
 
   defp parse(["[" | tail], acc, in_map) do
     {rem_tokens, sub_tree} = parse(tail, [])
@@ -70,4 +68,9 @@ defmodule Parse do
   defp string_or_atom(~s(") <> token), do: Common.drop_last(token)
   defp string_or_atom(":" <> token), do: String.to_atom(token)
   defp string_or_atom(token), do: String.to_atom(token)
+
+  defp flatten_if_trivial([expr]) when is_tuple(expr), do: expr
+  defp flatten_if_trivial([expr]) when is_map(expr), do: expr
+  defp flatten_if_trivial([expr]) when is_list(expr), do: expr
+  defp flatten_if_trivial(expr), do: expr
 end
