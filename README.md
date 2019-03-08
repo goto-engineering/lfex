@@ -35,9 +35,6 @@ If `rlwrap` is installed, you can get free REPL niceties like previous commands 
 
 ## Todo
 
-1. FIX: simple scalars like 1 and "hi" evaluate to [1] and ["hi"]
-1. FIX: Maps directly nested in maps don't parse right: `%{:users %{:name "Alice" :age 30}}`
-1. Parse to Elixir AST and eval using Elixir evaluator
 1. Use macros - defmodule, defn
 1. Function references
 1. Compile source files to .beam bytecode

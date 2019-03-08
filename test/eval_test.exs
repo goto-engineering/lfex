@@ -33,6 +33,15 @@ defmodule EvalTest do
     assert Eval.eval(expr) == {{"Jose", "Rich"}, {:brazil, :usa}}
   end
 
+  test "evals weird nested tuples" do
+    expr = """
+    {{"Jose" "Rich"}}
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == {{"Jose", "Rich"}}
+  end
+
   test "evals maps" do
     expr = """
     %{:user %{:name "Alice" :age 30}}
@@ -106,7 +115,6 @@ defmodule EvalTest do
     (IO.puts "Ok")
     """
     |> Parse.parse
-    |> IO.inspect
 
     assert capture_io(fn ->
       Eval.eval(expr)

@@ -1,0 +1,18 @@
+(+ 2 3)
+
+(IO.puts (Enum.join ["Hola mundo!"] ", "))
+
+;; (defmodule Test [:do def [bob :do [:baz]]])
+
+;; (def some_func "Hi")
+
+mix repl
+
+(defmodule Test
+	(def bob
+	 	:baz))
+
+(def)
+
+(def barney
+  :hi-there)
