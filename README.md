@@ -5,9 +5,8 @@ Inspired by Lispex and LFE.
 ## Todo
 
 1.Parse to Elixir AST and eval using Elixir evaluator
-
+1.FIX: simple scalars like 1 and "hi" evaluate to [1] and ["hi"]
 1.Use macros - defmodule, defn
-1.Error handling - don't just crash the REPL
 1.Function references
 1.Compile source files to .beam bytecode
 1.Pattern matching - let?

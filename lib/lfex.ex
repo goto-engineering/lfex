@@ -1,8 +1,12 @@
 defmodule Lfex do
   def interpret(program) do
-    program
-    |> Parse.parse
-    |> Eval.eval
+    try do
+      program
+      |> Parse.parse
+      |> Eval.eval
+    rescue
+      e -> "Error: #{e.message}"
+    end
   end
 
   def to_lfex_string(expr) when is_atom(expr), do: ":#{expr}"
@@ -29,7 +33,7 @@ defmodule Lfex do
 
   def repl do
     program = IO.gets "lfex> "
-    result  = program |> interpret()
+    result = program |> interpret()
     result |> to_lfex_string |> IO.puts
     repl()
   end
