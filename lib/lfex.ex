@@ -34,7 +34,16 @@ defmodule Lfex do
   def repl do
     program = IO.gets "lfex> "
     result = program |> interpret()
-    result |> to_lfex_string |> IO.puts
+
+    try do
+      result |> to_lfex_string |> IO.puts
+    rescue
+      e ->
+        IO.inspect e
+        IO.puts "Print error: #{}"
+        IO.inspect result
+    end
+
     repl()
   end
 end
