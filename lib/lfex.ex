@@ -5,7 +5,8 @@ defmodule Lfex do
       |> Parse.parse
       |> Eval.eval
     rescue
-      e -> "Error: #{e.message}"
+      e in CaseClauseError -> {:error, ~s/Invalid term "#{Kernel.inspect(e.term)}"/}
+      e -> {:error, e.message}
     end
   end
 
@@ -29,20 +30,22 @@ defmodule Lfex do
     "%{#{string}}"
   end
 
+  def to_lfex_string({:error, message}), do: "Error: #{message}"
+
   def to_lfex_string(expr), do: to_string(expr)
 
   def repl do
     program = IO.gets "lfex> "
     result = program |> interpret()
 
-    try do
+    # try do
       result |> to_lfex_string |> IO.puts
-    rescue
-      e ->
-        IO.inspect e
-        IO.puts "Print error: #{}"
-        IO.inspect result
-    end
+    # rescue
+    #   e ->
+    #     IO.inspect e
+    #     IO.puts "Print error: #{}"
+    #     IO.inspect result
+    # end
 
     repl()
   end
