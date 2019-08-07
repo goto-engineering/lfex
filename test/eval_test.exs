@@ -35,6 +35,13 @@ defmodule EvalTest do
 
   test "evals maps" do
     expr = """
+    %{:user %{:name "Alice" :age 30}}
+    """
+    |> Parse.parse
+
+    assert Eval.eval(expr) == %{user: %{name: "Alice", age: 30}}
+
+    expr = """
     %{:users [%{:name "Alice" :age 30}
               %{:name "Bob" :age 42}
               %{:name "Charlie" :age 12}]

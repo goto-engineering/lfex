@@ -28,6 +28,7 @@ defmodule ParseTest do
     assert Parse.parse("%{}") == %{}
     assert Parse.parse("%{:bob 1 :jane 2}") == %{:bob => 1, :jane => 2}
     assert Parse.parse(~s(%{:bob "one", "jane" 2})) == %{:bob => "one", "jane" => 2}
+    assert Parse.parse(~s/%{:user %{:name "Alice" :age 30}}/) == %{user: %{name: "Alice", age: 30}}
 
     map = """
     %{:users [%{:name "Alice" :age 30}
